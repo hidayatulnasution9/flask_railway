@@ -1,0 +1,26 @@
+version: '3.7'
+services:
+  db:
+    image: postgres
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+  web:
+    build:
+      context: .
+    command: sh -c "python -m flask run --host=0.0.0.0 --port=8080"
+    container_name: mywebsite
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=containers-us-west-125.railway.app
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PASS=postgres
